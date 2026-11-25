@@ -5,21 +5,30 @@ const connect = byId("connect");
 const brightness = byId("brightness");
 const disco = byId("disco");
 const discoSpeed = byId("disco-speed");
-const discoColours = ["#ff0000", "#ff8800", "#ffff00", "#00ff00", "#00ffff", "#0055ff", "#aa00ff", "#ff0088"];
+const usbFrameInterval = 40;
 const presets = [...byId("presets").querySelectorAll("button")];
 let active = { label: "Off", hex: "#000000" };
 let device = null;
 let timer;
-let discoTimer;
-let discoIndex = 0;
+let discoFrame;
+let hue = 0;
+let lastFrameTime;
+let lastUsbFrame = -Infinity;
 let discoWritePending = false;
 let working = false;
 let pending = Promise.resolve();
 
+function cycleSeconds() {
+  return 14 - Number(discoSpeed.value);
+}
+
+function renderLamp() {
+  byId("lamp").style.setProperty("--light", `color-mix(in srgb, ${active.hex} ${brightness.value}%, black)`);
+}
+
 function render() {
-  const level = Number(brightness.value);
-  byId("level").value = level + "%";
-  byId("lamp").style.setProperty("--light", `color-mix(in srgb, ${active.hex} ${level}%, black)`);
+  renderLamp();
+  byId("level").value = brightness.value + "%";
   byId("current").textContent = active.label;
   byId("device").textContent = device ? device.productName || "kuando Busylight" : "Preview mode";
   byId("connection").textContent = device ? "USB connected" : "Disconnected";
@@ -28,7 +37,7 @@ function render() {
   connect.disabled = working || !navigator.hid;
   disco.setAttribute("aria-pressed", String(active.label === "Disco"));
   disco.textContent = active.label === "Disco" ? "Stop Disco" : "RGB Disco";
-  byId("disco-rate").value = discoSpeed.value + (discoSpeed.value === "1" ? " colour/sec" : " colours/sec");
+  byId("disco-rate").value = cycleSeconds() + " s per cycle";
   for (const button of presets) button.setAttribute("aria-pressed", String(button.textContent === active.label));
 }
 
@@ -56,38 +65,49 @@ function enqueue(target, report) {
   return sent;
 }
 
-function apply(announce = true) {
+function apply() {
   render();
   if (!device || working) return;
   const target = device;
   const report = colourReport(active.hex, Number(brightness.value));
   return enqueue(target, report).then(() => {
-    if (announce && target === device) message("Command sent to your Busylight.");
+    if (target === device) message("Command sent to your Busylight.");
   }).catch(() => {});
 }
 
 function select(label, hex) {
-  clearInterval(discoTimer);
+  cancelAnimationFrame(discoFrame);
   active = { label, hex };
   apply();
 }
 
-function updateDiscoTimer() {
-  clearInterval(discoTimer);
-  render();
-  if (active.label !== "Disco") return;
+// Sample a full-saturation RGB colour wheel at the current animation phase.
+function rainbowColour(hue) {
+  const channels = [5, 3, 1].map(offset => {
+    const position = (hue / 60 + offset) % 6;
+    const intensity = 1 - Math.max(0, Math.min(position, 4 - position, 1));
+    return Math.round(intensity * 255).toString(16).padStart(2, "0");
+  });
+  return "#" + channels.join("");
+}
 
-  discoTimer = setInterval(async () => {
-    if (working || discoWritePending) return;
-    discoIndex = (discoIndex + 1) % discoColours.length;
-    active.hex = discoColours[discoIndex];
+function animateDisco(time) {
+  const elapsed = time - (lastFrameTime ?? time);
+  lastFrameTime = time;
+  hue = (hue + elapsed * 360 / (cycleSeconds() * 1000)) % 360;
+  active.hex = rainbowColour(hue);
+  renderLamp();
+
+  // Match the preview on the light while keeping at most one animation write in flight.
+  if (device && !working && !discoWritePending && time - lastUsbFrame >= usbFrameInterval) {
+    lastUsbFrame = time;
     discoWritePending = true;
-    try {
-      await apply(false);
-    } finally {
-      discoWritePending = false;
-    }
-  }, 1000 / Number(discoSpeed.value));
+    enqueue(device, colourReport(active.hex, Number(brightness.value)))
+      .catch(() => {})
+      .finally(() => { discoWritePending = false; });
+  }
+
+  discoFrame = requestAnimationFrame(animateDisco);
 }
 
 disco.addEventListener("click", () => {
@@ -95,11 +115,13 @@ disco.addEventListener("click", () => {
     select("Off", "#000000");
     return;
   }
-  discoIndex = 0;
-  select("Disco", discoColours[discoIndex]);
-  updateDiscoTimer();
+  hue = 0;
+  lastFrameTime = undefined;
+  lastUsbFrame = -Infinity;
+  select("Disco", rainbowColour(hue));
+  discoFrame = requestAnimationFrame(animateDisco);
 });
-discoSpeed.addEventListener("input", updateDiscoTimer);
+discoSpeed.addEventListener("input", render);
 
 connect.addEventListener("click", async () => {
   working = true;
