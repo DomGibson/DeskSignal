@@ -28,6 +28,12 @@
           <button data-color="#a650ff" style="--swatch:#a650ff">Do not disturb</button>
         </div>
         <form id="custom">
+          <div class="field">
+            <button type="button" id="disco" aria-pressed="false">RGB Disco</button>
+            <output id="disco-rate" for="disco-speed">4 colours/sec</output>
+          </div>
+          <label for="disco-speed">Disco speed</label>
+          <input type="range" id="disco-speed" min="1" max="12" value="4">
           <div class="field"><label for="color">Custom colour</label><input type="color" id="color" value="#38bdf8"></div>
           <div class="field"><label for="brightness">Brightness</label><output id="level" for="brightness">75%</output></div>
           <input type="range" min="1" max="100" value="75" id="brightness">

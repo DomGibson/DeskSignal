@@ -3,10 +3,16 @@ import { colourReport, filters, keepaliveReport } from "./protocol.mjs";
 const byId = id => document.getElementById(id);
 const connect = byId("connect");
 const brightness = byId("brightness");
+const disco = byId("disco");
+const discoSpeed = byId("disco-speed");
+const discoColours = ["#ff0000", "#ff8800", "#ffff00", "#00ff00", "#00ffff", "#0055ff", "#aa00ff", "#ff0088"];
 const presets = [...byId("presets").querySelectorAll("button")];
 let active = { label: "Off", hex: "#000000" };
 let device = null;
 let timer;
+let discoTimer;
+let discoIndex = 0;
+let discoWritePending = false;
 let working = false;
 let pending = Promise.resolve();
 
@@ -20,6 +26,9 @@ function render() {
   byId("connection").classList.toggle("connected", Boolean(device));
   connect.textContent = device ? "Disconnect" : "Connect light";
   connect.disabled = working || !navigator.hid;
+  disco.setAttribute("aria-pressed", String(active.label === "Disco"));
+  disco.textContent = active.label === "Disco" ? "Stop Disco" : "RGB Disco";
+  byId("disco-rate").value = discoSpeed.value + (discoSpeed.value === "1" ? " colour/sec" : " colours/sec");
   for (const button of presets) button.setAttribute("aria-pressed", String(button.textContent === active.label));
 }
 
@@ -47,20 +56,50 @@ function enqueue(target, report) {
   return sent;
 }
 
-function apply() {
+function apply(announce = true) {
   render();
   if (!device || working) return;
   const target = device;
   const report = colourReport(active.hex, Number(brightness.value));
-  enqueue(target, report).then(() => {
-    if (target === device) message("Command sent to your Busylight.");
+  return enqueue(target, report).then(() => {
+    if (announce && target === device) message("Command sent to your Busylight.");
   }).catch(() => {});
 }
 
 function select(label, hex) {
+  clearInterval(discoTimer);
   active = { label, hex };
   apply();
 }
+
+function updateDiscoTimer() {
+  clearInterval(discoTimer);
+  render();
+  if (active.label !== "Disco") return;
+
+  discoTimer = setInterval(async () => {
+    if (working || discoWritePending) return;
+    discoIndex = (discoIndex + 1) % discoColours.length;
+    active.hex = discoColours[discoIndex];
+    discoWritePending = true;
+    try {
+      await apply(false);
+    } finally {
+      discoWritePending = false;
+    }
+  }, 1000 / Number(discoSpeed.value));
+}
+
+disco.addEventListener("click", () => {
+  if (active.label === "Disco") {
+    select("Off", "#000000");
+    return;
+  }
+  discoIndex = 0;
+  select("Disco", discoColours[discoIndex]);
+  updateDiscoTimer();
+});
+discoSpeed.addEventListener("input", updateDiscoTimer);
 
 connect.addEventListener("click", async () => {
   working = true;

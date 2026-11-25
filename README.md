@@ -1,6 +1,6 @@
 # DeskSignal
 
-Control a USB kuando Busylight UC Alpha or Omega from desktop Chrome or Edge. Includes four presence presets, custom RGB colours, brightness and off. The same interface previews settings without a device. Status is set manually.
+Control a USB kuando Busylight UC Alpha or Omega from desktop Chrome or Edge. Includes four presence presets, custom RGB colours, brightness, off and RGB Disco. Disco cycles through eight colours at an adjustable rate of 1–12 colour changes per second. Selecting a static colour or turning the light off stops the cycle. The same interface previews settings without a device. Status is set manually.
 
 ## Start
 
