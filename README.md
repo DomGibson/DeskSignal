@@ -22,3 +22,7 @@ The local server only serves the interface. The browser sends commands directly 
 - `protocol.mjs` packs 64-byte output reports for the supported USB IDs.
 
 Protocol references are [Busylight for Humans](https://github.com/JnyJny/busylight) and [BusylightMenu](https://github.com/mark-bixler/busy-light).
+
+## G.711 Audio Converter
+
+Choose **G.711 Audio Converter** on the dashboard. It converts browser-supported audio files to 8 kHz mono G.711 μ-law on your device. Choose WAV for a file with format metadata, or raw `.ulaw` when your phone system expects headerless μ-law bytes.

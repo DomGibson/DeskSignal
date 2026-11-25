@@ -67,3 +67,13 @@ output, .message { color: var(--muted); }
 .tool-action { margin-top: 8px; color: var(--accent); font-weight: 650; }
 .tool-nav { margin-bottom: 20px; }
 .tool-nav a { color: var(--accent); text-underline-offset: 4px; }
+
+.tool-audio { display: grid; place-items: center; width: 42px; aspect-ratio: 1; border-radius: 12px; background: #263d45; color: var(--accent); font-size: 1.6rem; }
+.audio-panel { max-width: 660px; }
+.audio-summary { color: var(--muted); line-height: 1.5; }
+.audio-form { display: grid; gap: 12px; }
+.audio-form input, .audio-form select { width: 100%; font: inherit; }
+.audio-form input::file-selector-button, .audio-form select { background: #232833; color: inherit; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font: inherit; }
+.audio-form input::file-selector-button { margin-right: 10px; }
+.audio-form .actions { margin-top: 6px; }
+.audio-form a { color: var(--accent); }

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>G.711 Audio Converter</title>
+  <link rel="stylesheet" href="./style.css?v=audio-1">
+  <script type="module" src="./audio-converter.mjs?v=audio-1"></script>
+</head>
+<body>
+  <main>
+    <nav class="tool-nav" aria-label="Tools"><a href="./">← All tools</a></nav>
+    <header><h1>G.711 Audio Converter</h1></header>
+    <section class="panel audio-panel" aria-label="Audio conversion">
+      <p class="audio-summary">CCITT G.711 μ-law · 8,000 Hz · mono. Files are converted in your browser.</p>
+      <form id="audio-form" class="audio-form">
+        <label for="audio-file">Audio file</label>
+        <input type="file" id="audio-file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.aiff,.webm,.mp4" required>
+        <label for="audio-format">Output format</label>
+        <select id="audio-format">
+          <option value="wav">μ-law WAV (.wav)</option>
+          <option value="raw">Raw μ-law (.ulaw)</option>
+        </select>
+        <div class="actions">
+          <button type="submit" class="primary" id="convert">Convert audio</button>
+          <a id="audio-download" hidden>Download converted audio</a>
+        </div>
+      </form>
+      <p class="message" id="audio-status" role="status">Choose an MP3, WAV or another audio file your browser supports.</p>
+    </section>
+  </main>
+</body>
+</html>
