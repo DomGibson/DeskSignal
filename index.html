@@ -3,45 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DeskSignal</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="app.mjs?v=rainbow-1"></script>
+  <title>Tools Dashboard</title>
+  <link rel="stylesheet" href="./style.css?v=dashboard-1">
 </head>
 <body>
   <main>
-    <header>
-      <div><p class="brand">KUANDO · USB</p><h1>DeskSignal</h1></div>
-      <button id="connect" class="primary">Connect light</button>
-    </header>
-    <div class="layout">
-      <section class="panel monitor" aria-labelledby="preview">
-        <div class="monitor-top"><h2 id="preview">Light preview</h2><span id="connection">Disconnected</span></div>
-        <div class="lamp-stage" aria-hidden="true"><div id="lamp"></div></div>
-        <div><p class="caption" id="device">Preview mode</p><p class="current" id="current">Off</p></div>
-      </section>
-      <section class="panel controls" aria-labelledby="presets-title">
-        <h2 id="presets-title">Status presets</h2>
-        <div class="presets" id="presets">
-          <button data-color="#00ff55" style="--swatch:#00ff55">Available</button>
-          <button data-color="#ff2020" style="--swatch:#ff2020">Busy</button>
-          <button data-color="#ffae00" style="--swatch:#ffae00">Away</button>
-          <button data-color="#a650ff" style="--swatch:#a650ff">Do not disturb</button>
-        </div>
-        <form id="custom">
-          <div class="field">
-            <button type="button" id="disco" aria-pressed="false">RGB Disco</button>
-            <output id="disco-rate" for="disco-speed">10 s per cycle</output>
-          </div>
-          <label for="disco-speed">Disco speed</label>
-          <input type="range" id="disco-speed" min="1" max="12" value="4">
-          <div class="field"><label for="color">Custom colour</label><input type="color" id="color" value="#38bdf8"></div>
-          <div class="field"><label for="brightness">Brightness</label><output id="level" for="brightness">75%</output></div>
-          <input type="range" min="1" max="100" value="75" id="brightness">
-          <div class="actions"><button type="submit" class="primary">Apply colour</button><button type="button" id="off">Turn off</button></div>
-        </form>
-      </section>
-    </div>
-    <p class="message" id="message" role="status">Connect a USB Busylight Alpha or Omega, or try the controls in preview mode.</p>
+    <header><h1>Tools Dashboard</h1></header>
+    <section class="tool-grid" aria-label="Available tools">
+      <a class="panel tool-card" href="./desk-signal.html">
+        <span class="tool-light" aria-hidden="true"></span>
+        <h2>DeskSignal</h2>
+        <p>Control your kuando USB Busylight with status presets, custom colours and RGB Disco.</p>
+        <span class="tool-action">Open controller <span aria-hidden="true">→</span></span>
+      </a>
+    </section>
   </main>
 </body>
 </html>

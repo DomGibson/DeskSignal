@@ -5,7 +5,7 @@ const connect = byId("connect");
 const brightness = byId("brightness");
 const disco = byId("disco");
 const discoSpeed = byId("disco-speed");
-const usbFrameInterval = 40;
+const usbFrameInterval = 15;
 const presets = [...byId("presets").querySelectorAll("button")];
 let active = { label: "Off", hex: "#000000" };
 let device = null;
@@ -19,7 +19,7 @@ let working = false;
 let pending = Promise.resolve();
 
 function cycleSeconds() {
-  return 14 - Number(discoSpeed.value);
+  return (131 - Number(discoSpeed.value)) / 10;
 }
 
 function renderLamp() {
@@ -37,7 +37,9 @@ function render() {
   connect.disabled = working || !navigator.hid;
   disco.setAttribute("aria-pressed", String(active.label === "Disco"));
   disco.textContent = active.label === "Disco" ? "Stop Disco" : "RGB Disco";
-  byId("disco-rate").value = cycleSeconds() + " s per cycle";
+  const duration = cycleSeconds();
+  byId("disco-rate").value = duration + " s per cycle";
+  discoSpeed.setAttribute("aria-valuetext", duration + " seconds per cycle");
   for (const button of presets) button.setAttribute("aria-pressed", String(button.textContent === active.label));
 }
 
@@ -99,7 +101,8 @@ function animateDisco(time) {
   renderLamp();
 
   // Match the preview on the light while keeping at most one animation write in flight.
-  if (device && !working && !discoWritePending && time - lastUsbFrame >= usbFrameInterval) {
+  const usbInterval = Math.min(40, Math.max(usbFrameInterval, cycleSeconds() * 125));
+  if (device && !working && !discoWritePending && time - lastUsbFrame >= usbInterval) {
     lastUsbFrame = time;
     discoWritePending = true;
     enqueue(device, colourReport(active.hex, Number(brightness.value)))

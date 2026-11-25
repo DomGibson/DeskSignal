@@ -51,3 +51,19 @@ output, .message { color: var(--muted); }
 .actions { justify-content: flex-start; flex-wrap: wrap; }
 .message { margin-top: 16px; font-size: .88rem; line-height: 1.5; }
 @media (max-width: 680px) { .layout { grid-template-columns: 1fr; } .monitor { min-height: 275px; } }
+
+.tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 16px; }
+.tool-card { display: grid; max-width: 365px; gap: 12px; color: inherit; text-decoration: none; }
+.tool-card:hover, .tool-card:focus-visible { border-color: var(--accent); }
+.tool-card h2 { font-size: 1.4rem; }
+.tool-card p { color: var(--muted); line-height: 1.5; }
+.tool-light {
+  width: 42px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(#ff4775, #ffd36a, #62efb2, #59c8ff, #b37bff, #ff4775);
+  box-shadow: 0 0 20px #a4c6ff40;
+}
+.tool-action { margin-top: 8px; color: var(--accent); font-weight: 650; }
+.tool-nav { margin-bottom: 20px; }
+.tool-nav a { color: var(--accent); text-underline-offset: 4px; }
