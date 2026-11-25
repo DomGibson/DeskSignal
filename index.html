@@ -4,11 +4,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tools Dashboard</title>
-  <link rel="stylesheet" href="./style.css?v=audio-1">
+  <link rel="stylesheet" href="./style.css?v=weather-1">
+  <script type="module" src="./dashboard.mjs?v=weather-1"></script>
 </head>
-<body>
+<body class="weather-dashboard">
+  <div id="weather-effect" aria-hidden="true"></div>
   <main>
-    <header><h1>Tools Dashboard</h1></header>
+    <header class="dashboard-header">
+      <h1>Tools Dashboard</h1>
+      <div class="dashboard-clock"><time id="clock"></time><p id="clock-date" class="caption"></p></div>
+    </header>
+    <section class="panel weather-panel" aria-labelledby="weather-title">
+      <div class="weather-content">
+        <h2 id="weather-title">Local weather</h2>
+        <p id="weather-status" class="weather-status" role="status">Choose a location to see current conditions.</p>
+        <p class="caption"><a href="https://open-meteo.com/">Weather data by Open-Meteo</a></p>
+      </div>
+      <form id="weather-form" class="weather-form">
+        <label for="weather-town">Town or city</label>
+        <div class="weather-actions">
+          <input id="weather-town" type="text" placeholder="e.g. Manchester" autocomplete="off" maxlength="80">
+          <button id="weather-find" type="submit">Find weather</button>
+          <button id="weather-locate" type="button">Use my location</button>
+        </div>
+      </form>
+    </section>
+    <div class="dashboard-search">
+      <label for="tool-search">Search tools</label>
+      <input id="tool-search" type="search" placeholder="Search by name or feature">
+    </div>
+    <p id="search-empty" class="message" role="status" hidden>No matching tools.</p>
     <section class="tool-grid" aria-label="Available tools">
       <a class="panel tool-card" href="./desk-signal.html">
         <span class="tool-light" aria-hidden="true"></span>
