@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tools Dashboard</title>
-  <link rel="stylesheet" href="./style.css?v=weather-1">
-  <script type="module" src="./dashboard.mjs?v=weather-1"></script>
+  <link rel="stylesheet" href="./style.css?v=storm-1">
+  <script type="module" src="./dashboard.mjs?v=storm-1"></script>
   <style>
     .tool-card--maintenance { position: relative; isolation: isolate; cursor: default; overflow: hidden; }
     .weather-dashboard .tool-card--maintenance { filter: grayscale(1); border-color: #83889370; }
@@ -35,7 +35,7 @@
   </style>
 </head>
 <body class="weather-dashboard">
-  <div id="weather-effect" aria-hidden="true"></div>
+  <div id="weather-effect" aria-hidden="true"><span id="weather-bolt"></span></div>
   <main>
     <header class="dashboard-header">
       <h1>Tools Dashboard</h1>
@@ -56,6 +56,17 @@
         </div>
       </form>
     </section>
+    <div class="weather-controls" aria-label="Weather effects">
+      <label for="weather-preview">Weather effects</label>
+      <select id="weather-preview">
+        <option value="">Match local weather</option>
+        <option value="heavy-rain">Heavy rain</option>
+        <option value="storm">Thunderstorm</option>
+        <option value="blizzard">Blizzard</option>
+        <option value="off">Off</option>
+      </select>
+      <button id="weather-sound" type="button" aria-pressed="false">Thunder sound off</button>
+    </div>
     <div class="dashboard-search">
       <label for="tool-search">Search tools</label>
       <input id="tool-search" type="search" placeholder="Search by name or feature">

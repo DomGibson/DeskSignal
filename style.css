@@ -125,3 +125,63 @@ output, .message { color: var(--muted); }
 @keyframes weather-fall { to { transform: translate(8vw, calc(100vh + 30px)); } }
 @media (max-width: 740px) { .weather-panel { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { #weather-effect { display: none; } }
+
+.weather-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 14px; }
+.weather-controls select {
+  padding: 10px; border: 1px solid var(--border); border-radius: 10px;
+  background: #202937; color: inherit; font: inherit;
+}
+.weather-dashboard[data-weather="heavy-rain"] { --sky: #324f78; }
+.weather-dashboard[data-weather="storm"] { --sky: #373a72; }
+.weather-dashboard[data-weather="blizzard"] { --sky: #7296b1; }
+.weather-dashboard:is([data-weather="snow"], [data-weather="blizzard"]) .panel {
+  border-color: #d0eaff99;
+  background: linear-gradient(145deg, #aecce464, #20324ae8 64%);
+  box-shadow: inset 0 1px 1px #f2faff70, 0 12px 36px #060a1233;
+}
+[data-weather="rain"] .weather-particle:nth-of-type(n+40),
+[data-weather="snow"] .weather-particle:nth-of-type(n+49) { display: none; }
+[data-weather="snow"] .weather-particle {
+  animation-name: weather-snowfall;
+  box-shadow: 0 0 6px #dfedffc0;
+}
+:is([data-weather="heavy-rain"], [data-weather="storm"]) .weather-particle {
+  display: block;
+  width: 2px; height: 48px; border-radius: 50%;
+  background: linear-gradient(transparent, #b4dcffa8);
+  animation: weather-downpour calc(var(--fall) * .17) linear var(--delay) infinite;
+}
+[data-weather="blizzard"] .weather-particle {
+  display: block;
+  width: calc(var(--size) * 1.25); aspect-ratio: 1; border-radius: 50%;
+  background: #effaffdb; box-shadow: 0 0 8px #e0f3ffb0;
+  animation: weather-snowfall calc(var(--fall) * .55) linear var(--delay) infinite;
+}
+.weather-splash { display: none; }
+:is([data-weather="heavy-rain"], [data-weather="storm"]) .weather-splash {
+  display: block; position: absolute; bottom: 3vh; left: var(--x);
+  width: 24px; height: 7px; border-radius: 50%; border: 1px solid #afd7ff;
+  animation: weather-splash var(--fall) ease-out var(--delay) infinite;
+}
+#weather-bolt { display: none; }
+[data-weather="storm"] #weather-bolt {
+  display: block; position: absolute; top: 0; right: 15%; width: min(16vw, 135px); height: min(34vh, 280px);
+  opacity: 0; background: #dae9ff;
+  clip-path: polygon(54% 0, 75% 0, 48% 38%, 65% 38%, 23% 100%, 41% 51%, 22% 51%);
+  animation: weather-lightning 10s linear infinite;
+}
+@keyframes weather-lightning {
+  0% { opacity: .72; }
+  2% { opacity: .24; }
+  5%, 100% { opacity: 0; }
+}
+@keyframes weather-downpour { to { transform: translate(22vw, calc(100vh + 75px)) rotate(-12deg); } }
+@keyframes weather-snowfall {
+  30% { transform: translate(9vw, 32vh); }
+  65% { transform: translate(4vw, 68vh); }
+  100% { transform: translate(17vw, calc(100vh + 30px)); }
+}
+@keyframes weather-splash {
+  0% { opacity: .75; transform: scale(.15); }
+  35%, 100% { opacity: 0; transform: scale(2.2); }
+}
