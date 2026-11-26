@@ -6,6 +6,33 @@
   <title>Tools Dashboard</title>
   <link rel="stylesheet" href="./style.css?v=weather-1">
   <script type="module" src="./dashboard.mjs?v=weather-1"></script>
+  <style>
+    .tool-card--maintenance { position: relative; isolation: isolate; cursor: default; overflow: hidden; }
+    .weather-dashboard .tool-card--maintenance { filter: grayscale(1); border-color: #83889370; }
+    .weather-dashboard .tool-card--maintenance:hover { border-color: #83889370; }
+    .tool-card--maintenance::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: #101216a6;
+    }
+    .tool-maintenance-label {
+      position: absolute;
+      z-index: 2;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      width: max-content;
+      max-width: calc(100% - 24px);
+      padding: 9px 14px;
+      border: 1px solid #9ca3af;
+      border-radius: 8px;
+      background: #22252b;
+      color: #fff;
+      font-weight: 650;
+      text-align: center;
+    }
+  </style>
 </head>
 <body class="weather-dashboard">
   <div id="weather-effect" aria-hidden="true"></div>
@@ -47,12 +74,12 @@
         <p>Convert MP3, WAV and other supported audio to 8 kHz mono μ-law.</p>
         <span class="tool-action">Open converter <span aria-hidden="true">→</span></span>
       </a>
-      <a class="panel tool-card" href="./router.html">
+      <article class="panel tool-card tool-card--maintenance">
         <span class="tool-audio" aria-hidden="true">↔</span>
         <h2>Router Reachability</h2>
         <p>Ping an IP, check a known TCP port and open the router’s admin page.</p>
-        <span class="tool-action">Open diagnostics <span aria-hidden="true">→</span></span>
-      </a>
+        <span class="tool-maintenance-label">Under maintenance</span>
+      </article>
     </section>
   </main>
 </body>
