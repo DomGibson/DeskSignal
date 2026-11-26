@@ -26,3 +26,9 @@ Protocol references are [Busylight for Humans](https://github.com/JnyJny/busylig
 ## G.711 Audio Converter
 
 Choose **G.711 Audio Converter** on the dashboard. It converts browser-supported audio files to 8 kHz mono G.711 μ-law on your device. Choose WAV for a file with format metadata, or raw `.ulaw` when your phone system expects headerless μ-law bytes.
+
+## Router Reachability
+
+Open the **Router Reachability** card to build an admin URL. Enter the IPv4 address, choose HTTP or HTTPS and enter a known port and path if required. Start with the root path, or use the path documented for your router. The browser follows normal redirects when you open the link.
+
+To run ICMP and TCP checks, extract the project ZIP and open `Start-Router-Checks.bat` on Windows with Python 3. On macOS or Linux, run `python3 router_checks.py` and open `http://127.0.0.1:8766/`. For WAN reachability, run the companion from a PC outside the router's LAN. Check equipment you own or are authorised to support.

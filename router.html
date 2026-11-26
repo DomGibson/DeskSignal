@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Router Reachability</title>
+  <link rel="stylesheet" href="./style.css?v=weather-1">
+  <script type="module" src="./router.mjs?v=router-1"></script>
+</head>
+<body>
+  <main>
+    <nav class="tool-nav" aria-label="Tools"><a href="https://domgibson.github.io/DeskSignal/">← All tools</a></nav>
+    <header><h1>Router Reachability</h1></header>
+    <section class="panel audio-panel">
+      <div id="router-setup">
+        <h2>Run diagnostics from your support PC</h2>
+        <p>Download and extract the project, then run <strong>Start-Router-Checks.bat</strong> on Windows with Python 3 installed. It opens the local dashboard.</p>
+        <p><a href="https://github.com/DomGibson/DeskSignal/archive/refs/heads/main.zip">Download project ZIP</a></p>
+      </div>
+      <p class="audio-summary" id="router-local" hidden>Checks run from this PC. To test WAN reachability, run them from outside the router’s network.</p>
+      <form id="router-form" class="audio-form">
+        <label for="router-ip">Router IPv4 address</label>
+        <input id="router-ip" placeholder="e.g. 192.168.1.1" autocomplete="off" inputmode="decimal" required>
+        <label for="router-port">TCP port (optional)</label>
+        <input id="router-port" type="number" min="1" max="65535" step="1" placeholder="e.g. 443">
+        <label for="router-scheme">Admin portal protocol</label>
+        <select id="router-scheme"><option value="https">HTTPS</option><option value="http">HTTP</option></select>
+        <label for="router-path">Known admin path</label>
+        <input id="router-path" value="/" maxlength="512" autocomplete="off" aria-describedby="router-path-help">
+        <p id="router-path-help" class="caption">Start at / or use the path from your router’s manual. Leave the port empty to use the protocol’s default for the link.</p>
+        <div class="actions">
+          <button type="submit" class="primary" id="router-run" hidden>Run checks</button>
+          <button type="button" id="router-build">Build admin link</button>
+        </div>
+        <a id="router-link" target="_blank" rel="noopener noreferrer" hidden></a>
+      </form>
+      <p class="message" id="router-status" role="status"></p>
+      <dl id="router-results" hidden>
+        <dt>ICMP ping</dt><dd id="ping-result"></dd>
+        <dt>TCP port</dt><dd id="tcp-result"></dd>
+      </dl>
+    </section>
+  </main>
+</body>
+</html>
