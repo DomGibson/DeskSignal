@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customer Signal Check</title>
+  <link rel="stylesheet" href="./style.css?v=weather-1">
+  <script type="module" src="./customer-signal.mjs?v=signal-1"></script>
+  <style>
+    .signal-form { margin-top: 0; padding-top: 0; border: 0; }
+    .signal-form input:not([type="checkbox"]), #signal-report { padding: 10px; border: 1px solid var(--border); border-radius: 8px; color: inherit; background: #141923; font: inherit; }
+    .signal-form input[type="checkbox"] { width: auto; margin-right: 6px; }
+    .signal-section { margin-top: 16px; }
+    .signal-links { display: flex; flex-wrap: wrap; gap: 12px 18px; margin-top: 14px; }
+    .signal-links a { color: var(--accent); }
+    #signal-report { display: block; width: 100%; min-height: 220px; margin: 12px 0; resize: vertical; }
+    .signal-section .message { margin-top: 8px; }
+  </style>
+</head>
+<body class="weather-dashboard">
+  <main>
+    <nav class="tool-nav" aria-label="Tools"><a href="./">← All tools</a></nav>
+    <header><h1>Customer Signal Check</h1></header>
+    <section class="panel audio-panel" aria-label="Connection test">
+      <form id="signal-form" class="audio-form signal-form">
+        <label for="signal-network">Mobile network</label>
+        <select id="signal-network">
+          <option value="vodafone">Vodafone</option><option value="o2">O2</option><option value="ee">EE</option>
+          <option value="other" selected>Other or unsure</option>
+        </select>
+        <label for="signal-postcode">UK postcode</label>
+        <input id="signal-postcode" autocomplete="postal-code" placeholder="e.g. SW1A 1AA" maxlength="12" required>
+        <label for="signal-setting">Where are you testing?</label>
+        <select id="signal-setting"><option>Indoors</option><option>Outdoors</option></select>
+        <label><input type="checkbox" id="signal-cellular" required> Wi-Fi is off and mobile data is on</label>
+        <button type="submit" class="primary" id="signal-run">Run connection test</button>
+      </form>
+      <p class="message">Measures web requests from your phone. It cannot read signal bars or dBm.</p>
+      <p class="message" id="signal-status" role="status"></p>
+    </section>
+    <section class="panel audio-panel signal-section" aria-labelledby="lookup-title">
+      <h2 id="lookup-title">Check postcode coverage and outages</h2>
+      <p class="message">Enter the same postcode on the official checker. Coverage is predicted. Reported faults and maintenance come from your network.</p>
+      <div class="signal-links">
+        <button type="button" id="postcode-copy">Copy postcode</button>
+        <a href="https://www.ofcom.org.uk/mobile-coverage-checker" target="_blank" rel="noopener noreferrer">Ofcom coverage map ↗</a>
+        <a id="signal-outage" href="./mobile-signal.html" target="_blank" rel="noopener noreferrer">Choose a network checker ↗</a>
+      </div>
+      <p id="postcode-status" class="message" role="status"></p>
+    </section>
+    <section id="signal-results" class="panel audio-panel signal-section" hidden>
+      <h2><label for="signal-report">Ticket summary</label></h2>
+      <p class="message">Copy and share this with your support engineer. The postcode and report stay on this page until you share them.</p>
+      <textarea id="signal-report" readonly></textarea>
+      <button type="button" id="report-copy">Copy report</button>
+      <p class="message" id="report-status" role="status"></p>
+    </section>
+  </main>
+</body>
+</html>
